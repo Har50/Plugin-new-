@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenAudit — Enterprise Audit Trail for AI Coding Agents</title>
+  <meta name="description" content="See exactly what your AI coding agent is doing. Session history, tool call logs, file change tracking, and SOC2-ready compliance reports for OpenCode." />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0a0c10; color: #e6edf3; line-height: 1.6; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+    /* Nav */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .logo { font-size: 1.3rem; font-weight: 700; color: #f0f6fc; }
+    .logo span { color: #58a6ff; }
+    nav a { color: #8b949e; text-decoration: none; font-size: 0.9rem; margin-left: 1.5rem; }
+    nav a:hover { color: #58a6ff; }
+
+    /* Hero */
+    .hero { padding: 5rem 0 4rem; text-align: center; }
+    .hero h1 { font-size: 3rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; background: linear-gradient(135deg, #f0f6fc 0%, #58a6ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.2rem; color: #8b949e; max-width: 650px; margin: 0 auto 2rem; }
+    .hero-badges { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+    .badge { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; background: #161b22; border: 1px solid #30363d; color: #8b949e; }
+    .btn { display: inline-block; padding: 0.85rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
+    .btn-primary { background: #58a6ff; color: #0a0c10; }
+    .btn-primary:hover { background: #79b8ff; }
+    .btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+    .btn-secondary:hover { background: #30363d; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; }
+
+    /* Screenshot */
+    .screenshot-section { padding: 2rem 0 4rem; }
+    .screenshot-placeholder { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 3rem; text-align: center; color: #8b949e; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 1rem; color: #58a6ff; }
+
+    /* Features */
+    .features { padding: 4rem 0; border-top: 1px solid #21262d; }
+    .features h2 { text-align: center; font-size: 2rem; margin-bottom: 3rem; color: #f0f6fc; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .feature-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 1.75rem; }
+    .feature-card .emoji { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .feature-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    .feature-card p { font-size: 0.9rem; color: #8b949e; }
+
+    /* Stats */
+    .stats-bar { padding: 3rem 0; border-top: 1px solid #21262d; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
+    .stat .number { font-size: 1.8rem; font-weight: 700; color: #58a6ff; }
+    .stat .label { font-size: 0.85rem; color: #8b949e; margin-top: 0.25rem; }
+
+    /* Pricing */
+    .pricing { padding: 4rem 0; border-top: 1px solid #21262d; }
+    .pricing h2 { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    .pricing .subtitle { text-align: center; color: #8b949e; margin-bottom: 3rem; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+    .pricing-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 2rem; position: relative; }
+    .pricing-card.featured { border-color: #58a6ff; }
+    .pricing-card.featured::before { content: "Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #58a6ff; color: #0a0c10; padding: 0.25rem 1rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .pricing-card .plan { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8b949e; margin-bottom: 0.5rem; }
+    .pricing-card .price { font-size: 2.5rem; font-weight: 700; color: #f0f6fc; margin-bottom: 0.25rem; }
+    .pricing-card .price span { font-size: 1rem; font-weight: 400; color: #8b949e; }
+    .pricing-card .description { font-size: 0.85rem; color: #8b949e; margin-bottom: 1.5rem; }
+    .pricing-card ul { list-style: none; margin-bottom: 1.5rem; }
+    .pricing-card ul li { padding: 0.4rem 0; font-size: 0.9rem; color: #c9d1d9; }
+    .pricing-card ul li::before { content: "\2713"; color: #3fb950; margin-right: 0.5rem; }
+    .pricing-card .btn { width: 100%; text-align: center; }
+
+    /* How it works */
+    .how-it-works { padding: 4rem 0; border-top: 1px solid #21262d; }
+    .how-it-works h2 { text-align: center; font-size: 2rem; margin-bottom: 3rem; color: #f0f6fc; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto; }
+    .step { text-align: center; }
+    .step .number { width: 40px; height: 40px; border-radius: 50%; background: #58a6ff; color: #0a0c10; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem; }
+    .step h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    .step p { font-size: 0.85rem; color: #8b949e; }
+    .step code { background: #21262d; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.8rem; color: #58a6ff; }
+
+    /* CTA */
+    .cta { padding: 4rem 0; text-align: center; border-top: 1px solid #21262d; }
+    .cta h2 { font-size: 2rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    .cta p { color: #8b949e; margin-bottom: 2rem; }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; }
+
+    /* Footer */
+    footer { padding: 2rem 0; border-top: 1px solid #21262d; text-align: center; color: #484f58; font-size: 0.85rem; }
+    footer a { color: #8b949e; text-decoration: none; }
+    footer a:hover { color: #58a6ff; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .cta-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Open<span>Audit</span></div>
+  <div>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#docs">Docs</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badges">
+      <span class="badge">OpenCode Plugin</span>
+      <span class="badge">SOC2 Ready</span>
+      <span class="badge">Open Source</span>
+    </div>
+    <h1>Know exactly what your<br/>AI coding agent is doing.</h1>
+    <p>Every tool call, file change, and error logged. Real-time dashboard. Compliance reports your CTO will actually sign off on.</p>
+    <div class="hero-actions">
+      <a href="#install" class="btn btn-primary">Install in 1 minute →</a>
+      <a href="https://github.com" class="btn btn-secondary">View on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<section class="screenshot-section">
+  <div class="container">
+    <div class="screenshot-placeholder">
+      <div class="icon">📊</div>
+      <p style="font-size: 1.2rem; font-weight: 600; color: #c9d1d9; margin-bottom: 0.5rem;">Live Dashboard Preview</p>
+      <p>Session list · Tool call history · File change log · Error monitoring · Export reports</p>
+      <p style="margin-top: 1rem; font-size: 0.85rem;">(Add a screenshot or demo GIF here)</p>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="container">
+    <h2>What you get</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="emoji">📋</div>
+        <h3>Session History</h3>
+        <p>Every OpenCode session logged with timestamps, message counts, and tool usage. Review what the AI worked on, even days later.</p>
+      </div>
+      <div class="feature-card">
+        <div class="emoji">🔍</div>
+        <h3>Tool Call Audit</h3>
+        <p>Every bash command, file read, edit, and write captured with full arguments. No black box — see exactly what the agent did.</p>
+      </div>
+      <div class="feature-card">
+        <div class="emoji">📁</div>
+        <h3>File Change Tracking</h3>
+        <p>Every file created or modified, with content previews. Know which files were touched and what changed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="emoji">🚨</div>
+        <h3>Error Monitoring</h3>
+        <p>All session errors captured with stack traces. Catch problems before they become production incidents.</p>
+      </div>
+      <div class="feature-card">
+        <div class="emoji">📄</div>
+        <h3>Compliance Reports</h3>
+        <p>Export per-session JSON reports. SOC2, HIPAA, and SOX ready. Your compliance team will love you.</p>
+      </div>
+      <div class="feature-card">
+        <div class="emoji">🔒</div>
+        <h3>Privacy First</h3>
+        <p>All data stays on your machine. No external servers. No telemetry. Your code never leaves your infrastructure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-it-works">
+  <div class="container">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="number">1</div>
+        <h3>Install the plugin</h3>
+        <p>Drop one file into <code>.opencode/plugins/</code> or <code>npm install @har53/opencode-audit</code></p>
+      </div>
+      <div class="step">
+        <div class="number">2</div>
+        <h3>Use OpenCode normally</h3>
+        <p>Every action is automatically logged to a local SQLite database</p>
+      </div>
+      <div class="step">
+        <div class="number">3</div>
+        <h3>Open the dashboard</h3>
+        <p><code>npm run dashboard</code> → see everything at <code>localhost:3456</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="number">100%</div>
+        <div class="label">Local / Private</div>
+      </div>
+      <div class="stat">
+        <div class="number">0</div>
+        <div class="label">External Servers</div>
+      </div>
+      <div class="stat">
+        <div class="number">5</div>
+        <div class="label">Event Types Tracked</div>
+      </div>
+      <div class="stat">
+        <div class="number">30s</div>
+        <div class="label">Setup Time</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="container">
+    <h2>Simple pricing</h2>
+    <p class="subtitle">Start free. Upgrade when you need compliance reporting.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="plan">Free</div>
+        <div class="price">$0 <span>/ forever</span></div>
+        <div class="description">For individual developers</div>
+        <ul>
+          <li>7-day session history</li>
+          <li>Basic dashboard</li>
+          <li>Tool call audit</li>
+          <li>File change tracking</li>
+          <li>Open source</li>
+        </ul>
+        <a href="#install" class="btn btn-secondary">Get started</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="plan">Pro</div>
+        <div class="price">$10 <span>/ month</span></div>
+        <div class="description">For professional teams</div>
+        <ul>
+          <li>1-year session history</li>
+          <li>Advanced dashboard</li>
+          <li>CSV report export</li>
+          <li>Email digests</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#install" class="btn btn-primary">Get started</a>
+      </div>
+      <div class="pricing-card">
+        <div class="plan">Enterprise</div>
+        <div class="price">$50 <span>/ seat / month</span></div>
+        <div class="description">For organizations</div>
+        <ul>
+          <li>Unlimited history</li>
+          <li>SOC2 / HIPAA reports</li>
+          <li>Team dashboard</li>
+          <li>SSO / SAML</li>
+          <li>Audit log retention</li>
+        </ul>
+        <a href="#" class="btn btn-secondary" onclick="alert('Coming soon. Join the waitlist below!')">Contact sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="install">
+  <div class="container">
+    <h2>Start auditing in 30 seconds</h2>
+    <p>Drop the plugin in your project and run the dashboard. That's it.</p>
+    <div class="cta-actions">
+      <a href="https://github.com" class="btn btn-primary">View on GitHub →</a>
+      <a href="#" class="btn btn-secondary" onclick="document.getElementById('waitlist').style.display='block'">Join Enterprise waitlist</a>
+    </div>
+    <div id="waitlist" style="display:none; margin-top: 2rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+      <form onsubmit="alert('Thanks! We\'ll notify you when Enterprise is ready.'); return false;" style="display: flex; gap: 0.5rem;">
+        <input type="email" placeholder="you@company.com" required style="flex: 1; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #30363d; background: #161b22; color: #e6edf3; font-size: 0.9rem;" />
+        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">Notify me</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>OpenAudit is not affiliated with OpenCode or Anomaly. <a href="https://github.com">GitHub</a> · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
