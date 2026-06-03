@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenCode Audit Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 2rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 1.5rem; color: #f0f6fc; }
+    h2 { font-size: 1.2rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.25rem; }
+    .stat-card .number { font-size: 2rem; font-weight: 600; color: #58a6ff; }
+    .stat-card .label { font-size: 0.85rem; color: #8b949e; margin-top: 0.25rem; }
+    .error-banner { background: #3d1f1f; border: 1px solid #f85149; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: #ffa198; }
+    table { width: 100%; border-collapse: collapse; background: #161b22; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+    th { background: #21262d; padding: 0.75rem 1rem; text-align: left; font-weight: 500; color: #8b949e; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { padding: 0.75rem 1rem; border-top: 1px solid #21262d; font-size: 0.9rem; }
+    tr:hover td { background: #1c2128; }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
+    .badge-active { background: #1b3827; color: #3fb950; border: 1px solid #3fb950; }
+    .badge-idle { background: #2d1f0d; color: #d29922; border: 1px solid #d29922; }
+    .empty { text-align: center; padding: 3rem; color: #8b949e; }
+  </style>
+</head>
+<body>
+  <h1>OpenCode Audit Dashboard</h1>
+
+  <% if (error) { %>
+    <div class="error-banner"><%= error %></div>
+  <% } %>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="number"><%= activeSessions %></div>
+      <div class="label">Active Sessions</div>
+    </div>
+    <div class="stat-card">
+      <div class="number"><%= totalTools %></div>
+      <div class="label">Tool Calls</div>
+    </div>
+    <div class="stat-card">
+      <div class="number"><%= totalFiles %></div>
+      <div class="label">File Changes</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" style="color: #f85149;"><%= totalErrors %></div>
+      <div class="label">Errors</div>
+    </div>
+  </div>
+
+  <h2>Recent Sessions</h2>
+
+  <% if (sessions.length === 0) { %>
+    <div class="empty">No sessions recorded yet. Place the plugin in .opencode/plugins/ and run OpenCode.</div>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Session ID</th>
+          <th>Created</th>
+          <th>Status</th>
+          <th>Messages</th>
+          <th>Tool Calls</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% sessions.forEach(s => { %>
+          <tr>
+            <td><a href="/session/<%= s.id %>"><%= s.id.slice(0, 8) %>...</a></td>
+            <td><%= new Date(s.created_at).toLocaleString() %></td>
+            <td><span class="badge badge-<%= s.status %>"><%= s.status %></span></td>
+            <td><%= s.message_count || 0 %></td>
+            <td><%= s.tool_count || 0 %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</body>
+</html>

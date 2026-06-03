@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session - OpenCode Audit</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 2rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: #58a6ff; text-decoration: none; font-size: 0.9rem; }
+    .back a:hover { text-decoration: underline; }
+    .meta { display: flex; gap: 2rem; margin-bottom: 2rem; padding: 1rem; background: #161b22; border: 1px solid #30363d; border-radius: 8px; font-size: 0.85rem; color: #8b949e; }
+    .meta strong { color: #c9d1d9; }
+    .section { margin-bottom: 2rem; }
+    .section h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #f0f6fc; padding-bottom: 0.5rem; border-bottom: 1px solid #21262d; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
+    .card .header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; color: #8b949e; }
+    .card .tool-name { color: #58a6ff; font-weight: 500; }
+    .card pre { background: #0d1117; border: 1px solid #21262d; border-radius: 4px; padding: 0.75rem; font-size: 0.8rem; overflow-x: auto; color: #c9d1d9; margin-top: 0.5rem; max-height: 200px; }
+    .file-path { color: #d2a8ff; }
+    .error-msg { color: #f85149; }
+    .role-user { color: #58a6ff; }
+    .role-assistant { color: #3fb950; }
+    .empty { text-align: center; padding: 2rem; color: #8b949e; }
+    .actions { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+    .btn { display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; border: 1px solid #30363d; background: #21262d; color: #c9d1d9; cursor: pointer; text-decoration: none; }
+    .btn:hover { background: #30363d; }
+  </style>
+</head>
+<body>
+  <div class="back"><a href="/dashboard">&larr; Back to Dashboard</a></div>
+  <h1>Session <%= session.id.slice(0, 12) %>...</h1>
+
+  <div class="meta">
+    <div><strong>Created:</strong> <%= new Date(session.created_at).toLocaleString() %></div>
+    <div><strong>Status:</strong> <%= session.status %></div>
+    <div><strong>Messages:</strong> <%= session.message_count || 0 %></div>
+    <div><strong>Tool Calls:</strong> <%= session.tool_count || 0 %></div>
+  </div>
+
+  <div class="actions">
+    <a href="/api/report/<%= session.id %>" class="btn">Export Report (JSON)</a>
+  </div>
+
+  <div class="section">
+    <h2>Tool Calls (<%= toolCalls.length %>)</h2>
+    <% if (toolCalls.length === 0) { %>
+      <div class="empty">No tool calls recorded.</div>
+    <% } %>
+    <% toolCalls.forEach(t => { %>
+      <div class="card">
+        <div class="header">
+          <span class="tool-name"><%= t.tool_name %></span>
+          <span><%= new Date(t.timestamp).toLocaleTimeString() %></span>
+        </div>
+        <pre><%= JSON.stringify(JSON.parse(t.args || "{}"), null, 2) %></pre>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="section">
+    <h2>File Changes (<%= fileChanges.length %>)</h2>
+    <% if (fileChanges.length === 0) { %>
+      <div class="empty">No file changes recorded.</div>
+    <% } %>
+    <% fileChanges.forEach(f => { %>
+      <div class="card">
+        <div class="header">
+          <span class="file-path"><%= f.file_path %></span>
+          <span><%= f.change_type %> &middot; <%= new Date(f.timestamp).toLocaleTimeString() %></span>
+        </div>
+        <% if (f.content_preview) { %>
+          <pre><%= f.content_preview.slice(0, 300) %></pre>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="section">
+    <h2>Messages (<%= messages.length %>)</h2>
+    <% if (messages.length === 0) { %>
+      <div class="empty">No messages recorded.</div>
+    <% } %>
+    <% messages.forEach(m => { %>
+      <div class="card">
+        <div class="header">
+          <span class="role-<%= m.role %>"><strong><%= m.role %></strong></span>
+          <span><%= new Date(m.timestamp).toLocaleTimeString() %></span>
+        </div>
+        <pre><%= m.content_preview %></pre>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="section">
+    <h2>Errors (<%= errors.length %>)</h2>
+    <% if (errors.length === 0) { %>
+      <div class="empty">No errors recorded.</div>
+    <% } %>
+    <% errors.forEach(e => { %>
+      <div class="card">
+        <div class="header">
+          <span class="error-msg"><%= e.error_type || "Error" %></span>
+          <span><%= new Date(e.timestamp).toLocaleTimeString() %></span>
+        </div>
+        <pre><%= e.message %></pre>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>
