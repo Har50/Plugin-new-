@@ -21,14 +21,14 @@ cp src/plugin.ts .opencode/plugins/audit-plugin.ts
 Or install via npm (once published):
 
 ```bash
-npm install opencode-audit
+npm install @har50/opencode-audit
 ```
 
 Then add to `opencode.json`:
 
 ```json
 {
-  "plugin": ["opencode-audit"]
+  "plugin": ["@har50/opencode-audit"]
 }
 ```
 

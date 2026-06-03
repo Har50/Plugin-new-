@@ -8,7 +8,7 @@
 
 **Repository:** https://github.com/YOUR_USERNAME/opencode-audit
 
-**npm package:** opencode-audit
+**npm package:** @har50/opencode-audit
 
 ---
 

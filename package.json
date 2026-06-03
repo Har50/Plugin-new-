@@ -1,8 +1,11 @@
 {
-  "name": "opencode-audit",
+  "name": "@har50/opencode-audit",
   "version": "1.0.0",
   "description": "Enterprise audit dashboard for OpenCode",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dashboard": "tsx dashboard/server.ts",
     "build": "tsc",
