@@ -6,7 +6,7 @@
 
 **Tags:** audit, security, compliance, enterprise, dashboard, logging
 
-**Repository:** https://github.com/YOUR_USERNAME/opencode-audit
+**Repository:** https://github.com/Har50/Plugin-new-
 
 **npm package:** @har53/opencode-audit
 

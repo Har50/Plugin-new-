@@ -13,11 +13,12 @@ Hey everyone! I built an audit dashboard for OpenCode that logs every tool call,
 - File changes with content previews
 
 **How to use:**
-1. Copy the plugin: https://github.com/Har50/Plugin-new-/blob/main/src/plugin.ts
-2. Or install via npm: `npm install @har53/opencode-audit`
-3. Drop it in `.opencode/plugins/`
-4. Run `npm run dashboard` (from the package) to see the UI
+1. Install: `npm install @har53/opencode-audit`
+2. Add to `opencode.json`: `"plugin": ["@har53/opencode-audit"]`
+3. Run the dashboard: `npm run dashboard`
+4. Open http://localhost:3456
 
 All local, no cloud, open source (MIT).
 
-Would love feedback! https://har50.github.io/Plugin-new-/
+GitHub: https://github.com/Har50/Plugin-new-
+Landing: https://opencode-audit.vercel.app/

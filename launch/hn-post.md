@@ -37,7 +37,7 @@ So I built OpenAudit — an OpenCode plugin that logs every action to a local SQ
 
 It's fully open source under MIT. I'd love feedback on what's missing and what would make your team actually pay for this.
 
-[GitHub link] | [Live demo / docs link]
+https://github.com/Har50/Plugin-new- | https://opencode-audit.vercel.app/
 
 ---
 
@@ -51,4 +51,4 @@ OpenAudit is an OpenCode plugin that records every tool call, file change, and e
 
 All local, zero cloud, open source (MIT).
 
-GitHub: [link]
+GitHub: https://github.com/Har50/Plugin-new-

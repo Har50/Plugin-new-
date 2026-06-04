@@ -14,4 +14,4 @@
 
 7/ Free for individuals, $10/mo for teams, $50/seat for enterprise.
 
-8/ Open source, MIT. Try it: https://har50.github.io/Plugin-new-/
+8/ Open source, MIT. Try it: https://opencode-audit.vercel.app/
