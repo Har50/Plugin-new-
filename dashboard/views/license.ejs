@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>License - OpenCode Audit</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 2rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    h2 { font-size: 1.15rem; margin-bottom: 1rem; color: #f0f6fc; padding-bottom: 0.5rem; border-bottom: 1px solid #21262d; }
+    .section { margin-bottom: 2.5rem; }
+    .plan-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.25rem; margin-bottom: 0.75rem; }
+    .plan-card.current { border-color: #58a6ff; }
+    .plan-card h3 { font-size: 1.1rem; color: #f0f6fc; margin-bottom: 0.25rem; }
+    .plan-card .price { font-size: 1.5rem; font-weight: 600; color: #c9d1d9; }
+    .plan-card .price-sub { font-size: 0.85rem; color: #8b949e; }
+    .plan-card ul { margin: 0.75rem 0; list-style: none; }
+    .plan-card ul li { padding: 0.3rem 0; font-size: 0.85rem; color: #8b949e; }
+    .plan-card ul li:before { content: "✓ "; color: #3fb950; }
+    .plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .btn { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500; cursor: pointer; text-decoration: none; border: none; }
+    .btn-primary { background: #238636; color: #fff; border: 1px solid #2ea043; }
+    .btn-primary:hover { background: #2ea043; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+    .btn-secondary:hover { background: #30363d; }
+    .btn-current { background: transparent; color: #8b949e; border: 1px solid #30363d; cursor: default; }
+    .activate-box { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem; }
+    .activate-box input { flex: 1; padding: 0.6rem 0.75rem; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #c9d1d9; font-size: 0.9rem; font-family: monospace; outline: none; }
+    .activate-box input:focus { border-color: #58a6ff; }
+    .activate-box input::placeholder { color: #484f58; }
+    .success-msg { background: #1b3827; border: 1px solid #3fb950; padding: 0.75rem 1rem; border-radius: 6px; color: #3fb950; margin: 0.5rem 0; font-size: 0.85rem; }
+    .error-msg { background: #3d1f1f; border: 1px solid #f85149; padding: 0.75rem 1rem; border-radius: 6px; color: #ffa198; margin: 0.5rem 0; font-size: 0.85rem; }
+    .payment-table { width: 100%; border-collapse: collapse; background: #161b22; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+    .payment-table th { background: #21262d; padding: 0.6rem 1rem; text-align: left; font-weight: 500; color: #8b949e; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .payment-table td { padding: 0.6rem 1rem; border-top: 1px solid #21262d; font-size: 0.85rem; }
+    .payment-table .paid { color: #3fb950; }
+    .payment-table .created { color: #d29922; }
+    .payment-table .failed { color: #f85149; }
+    .empty { text-align: center; padding: 2rem; color: #8b949e; }
+  </style>
+</head>
+<body>
+  <%- include('partials/header', { license, razorpayConfigured, path: 'license' }) %>
+
+  <h1>License & Billing</h1>
+  <p style="color:#8b949e;margin-bottom:1.5rem;font-size:0.9rem;">Manage your OpenAudit subscription and license keys.</p>
+
+  <div class="section" id="current-plan">
+    <h2>Current Plan</h2>
+    <div class="plan-card current">
+      <h3><%= license.plan.charAt(0).toUpperCase() + license.plan.slice(1) %></h3>
+      <% if (license.plan === 'free') { %>
+        <p style="color:#8b949e;font-size:0.9rem;margin-top:0.25rem;">7-day session history · Basic dashboard · Core features</p>
+      <% } else if (license.plan === 'pro') { %>
+        <p style="color:#8b949e;font-size:0.9rem;margin-top:0.25rem;">1-year history · Advanced dashboard · CSV export · Priority support</p>
+      <% } else { %>
+        <p style="color:#8b949e;font-size:0.9rem;margin-top:0.25rem;">Unlimited history · SOC2/HIPAA reports · Team dashboard · SSO/SAML</p>
+      <% } %>
+      <% if (license.expiresAt) { %>
+        <p style="color:#8b949e;font-size:0.8rem;margin-top:0.5rem;">Expires: <%= license.expiresAt %></p>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="section" id="upgrade">
+    <h2><%= license.plan === 'free' ? 'Upgrade Your Plan' : 'Available Plans' %></h2>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <h3>Free</h3>
+        <div class="price">$0</div>
+        <div class="price-sub">forever</div>
+        <ul>
+          <li>7-day session history</li>
+          <li>Basic dashboard</li>
+          <li>Tool call audit</li>
+          <li>File change tracking</li>
+          <li>Open source</li>
+        </ul>
+        <% if (license.plan === 'free') { %>
+          <button class="btn btn-current" disabled>Current</button>
+        <% } %>
+      </div>
+
+      <div class="plan-card">
+        <h3>Pro</h3>
+        <div class="price">$10</div>
+        <div class="price-sub">/ month</div>
+        <ul>
+          <li>1-year session history</li>
+          <li>Advanced dashboard</li>
+          <li>CSV report export</li>
+          <li>Email digests</li>
+          <li>Priority support</li>
+        </ul>
+        <% if (license.plan === 'pro') { %>
+          <button class="btn btn-current" disabled>Current</button>
+        <% } else { %>
+          <button class="btn btn-primary" onclick="checkout('pro')" id="btn-pro">Upgrade to Pro</button>
+        <% } %>
+      </div>
+
+      <div class="plan-card">
+        <h3>Enterprise</h3>
+        <div class="price">$50</div>
+        <div class="price-sub">/ seat / month</div>
+        <ul>
+          <li>Unlimited history</li>
+          <li>SOC2 / HIPAA reports</li>
+          <li>Team dashboard</li>
+          <li>SSO / SAML</li>
+          <li>Audit log retention</li>
+        </ul>
+        <% if (license.plan === 'enterprise') { %>
+          <button class="btn btn-current" disabled>Current</button>
+        <% } else { %>
+          <button class="btn btn-primary" onclick="checkout('enterprise')" id="btn-enterprise">Upgrade</button>
+        <% } %>
+      </div>
+    </div>
+    <div id="checkout-message"></div>
+  </div>
+
+  <div class="section" id="activate-key">
+    <h2>Activate License Key</h2>
+    <p style="color:#8b949e;font-size:0.85rem;margin-bottom:0.75rem;">Already purchased a license? Enter your key below.</p>
+    <div class="activate-box">
+      <input type="text" id="license-key-input" placeholder="OA-XXXXXXXX-XXXXXXXX-XXXXXXXX" />
+      <button class="btn btn-secondary" onclick="activateLicense()">Activate</button>
+    </div>
+    <div id="activate-message"></div>
+  </div>
+
+  <div class="section" id="payment-history">
+    <h2>Payment History</h2>
+    <% if (payments.length === 0) { %>
+      <div class="empty">No payment history.</div>
+    <% } else { %>
+      <table class="payment-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% payments.forEach(p => { %>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;"><%= p.orderId.slice(0, 12) %>...</td>
+              <td style="text-transform:capitalize;"><%= p.plan %></td>
+              <td><%= (p.amount / 100).toLocaleString('en-IN', { style: 'currency', currency: p.currency }) %></td>
+              <td class="<%= p.status %>"><%= p.status %></td>
+              <td><%= new Date(p.createdAt).toLocaleString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+
+  <script>
+    function checkout(plan) {
+      var links = {
+        pro: "https://rzp.io/rzp/4usSRem",
+        enterprise: "https://rzp.io/rzp/0a3e1rp",
+      };
+      window.open(links[plan] || links.pro, "_blank");
+    }
+
+    async function activateLicense() {
+      const input = document.getElementById('license-key-input');
+      const msgEl = document.getElementById('activate-message');
+      const key = input.value.trim();
+      msgEl.innerHTML = '';
+
+      if (!key) {
+        msgEl.innerHTML = '<div class="error-msg">Please enter a license key.</div>';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/license/activate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ licenseKey: key }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          msgEl.innerHTML = '<div class="success-msg">License activated! Plan: <strong>' + data.plan.charAt(0).toUpperCase() + data.plan.slice(1) + '</strong>. Refreshing page...</div>';
+          setTimeout(() => window.location.reload(), 2000);
+        } else {
+          msgEl.innerHTML = '<div class="error-msg">' + (data.error || 'Activation failed') + '</div>';
+        }
+      } catch (err) {
+        msgEl.innerHTML = '<div class="error-msg">Error: ' + err.message + '</div>';
+      }
+    }
+  </script>
+
+</body>
+</html>

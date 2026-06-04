@@ -77,6 +77,15 @@
     .step p { font-size: 0.85rem; color: #8b949e; }
     .step code { background: #21262d; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.8rem; color: #58a6ff; }
 
+    /* Feedback form */
+    .feedback { padding: 4rem 0; border-top: 1px solid #21262d; }
+    .feedback h2 { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; color: #f0f6fc; }
+    .feedback .subtitle { text-align: center; color: #8b949e; margin-bottom: 2rem; }
+    .feedback-form { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+    .feedback-form input, .feedback-form textarea { padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #30363d; background: #161b22; color: #e6edf3; font-size: 0.9rem; font-family: inherit; }
+    .feedback-form textarea { min-height: 100px; resize: vertical; }
+    .feedback-form .btn { width: 100%; text-align: center; }
+
     /* CTA */
     .cta { padding: 4rem 0; text-align: center; border-top: 1px solid #21262d; }
     .cta h2 { font-size: 2rem; margin-bottom: 0.5rem; color: #f0f6fc; }
@@ -131,7 +140,7 @@
       <div class="icon">📊</div>
       <p style="font-size: 1.2rem; font-weight: 600; color: #c9d1d9; margin-bottom: 0.5rem;">Live Dashboard Preview</p>
       <p>Session list · Tool call history · File change log · Error monitoring · Export reports</p>
-      <p style="margin-top: 1rem; font-size: 0.85rem;">(Add a screenshot or demo GIF here)</p>
+      <p style="margin-top: 1rem; font-size: 0.85rem;">→ Replace with demo.gif (record with OBS/ShareX) ←</p>
     </div>
   </div>
 </section>
@@ -249,7 +258,7 @@
           <li>Email digests</li>
           <li>Priority support</li>
         </ul>
-        <a href="#install" class="btn btn-primary">Get started</a>
+        <a href="#" class="btn btn-primary" onclick="payRazorpay('pro')">Get started</a>
       </div>
       <div class="pricing-card">
         <div class="plan">Enterprise</div>
@@ -262,9 +271,21 @@
           <li>SSO / SAML</li>
           <li>Audit log retention</li>
         </ul>
-        <a href="#" class="btn btn-secondary" onclick="alert('Coming soon. Join the waitlist below!')">Contact sales</a>
+        <a href="#" class="btn btn-secondary" onclick="payRazorpay('enterprise')">Get started</a>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="feedback" id="feedback">
+  <div class="container">
+    <h2>What do you want next?</h2>
+    <p class="subtitle">Your feedback shapes the roadmap. Tell me what's missing.</p>
+    <form class="feedback-form" onsubmit="alert('Thanks for the feedback!'); return false;">
+      <input type="email" placeholder="your@email.com (optional)" />
+      <textarea placeholder="What feature would make you use this daily? What's broken? What's missing?"></textarea>
+      <button type="submit" class="btn btn-primary">Send feedback</button>
+    </form>
   </div>
 </section>
 
@@ -291,5 +312,14 @@
   </div>
 </footer>
 
+<script>
+function payRazorpay(plan) {
+  var links = {
+    pro: "https://rzp.io/rzp/4usSRem",
+    enterprise: "https://rzp.io/rzp/0a3e1rp",
+  };
+  window.open(links[plan] || links.pro, "_blank");
+}
+</script>
 </body>
 </html>

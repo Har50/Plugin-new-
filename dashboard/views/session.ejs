@@ -30,6 +30,8 @@
   </style>
 </head>
 <body>
+  <%- include('partials/header', { license, razorpayConfigured, path: 'session' }) %>
+
   <div class="back"><a href="/dashboard">&larr; Back to Dashboard</a></div>
   <h1>Session <%= session.id.slice(0, 12) %>...</h1>
 

@@ -27,6 +27,8 @@
   </style>
 </head>
 <body>
+  <%- include('partials/header', { license, razorpayConfigured, path: 'dashboard' }) %>
+
   <h1>OpenCode Audit Dashboard</h1>
 
   <% if (error) { %>
