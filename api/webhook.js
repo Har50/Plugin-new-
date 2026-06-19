@@ -6,16 +6,17 @@ export default async function handler(req, res) {
   }
 
   const event = req.body;
-  const rawBody = JSON.stringify(event);
 
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || "";
-  if (webhookSecret) {
+  const receivedSignature = req.headers["x-razorpay-signature"];
+
+  if (webhookSecret && receivedSignature) {
+    const rawBody = typeof req.body === "string" ? req.body : JSON.stringify(req.body);
     const expectedSignature = crypto
       .createHmac("sha256", webhookSecret)
       .update(rawBody)
       .digest("hex");
-    const receivedSignature = req.headers["x-razorpay-signature"];
-    if (!receivedSignature || expectedSignature !== receivedSignature) {
+    if (expectedSignature !== receivedSignature) {
       return res.status(400).json({ error: "Invalid webhook signature" });
     }
   }
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
       await fetch(`${dashboardUrl}/api/razorpay/webhook`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: rawBody,
+        body: JSON.stringify(event),
       });
     } catch (err) {
       console.error(`[webhook] failed to forward to dashboard: ${err.message}`);
