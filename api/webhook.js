@@ -5,12 +5,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const chunks = [];
-  for await (const chunk of req) {
-    chunks.push(Buffer.from(chunk));
-  }
-  const rawBody = Buffer.concat(chunks).toString("utf-8");
-  const event = JSON.parse(rawBody);
+  const event = req.body;
+  const rawBody = JSON.stringify(event);
 
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || "";
   if (webhookSecret) {
